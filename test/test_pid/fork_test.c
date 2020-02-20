@@ -16,8 +16,7 @@ int main()
     }
     else
     {
-
-        printf("i am father :%d, ret : %d",getpid(), ret);
+        printf("i am father :%d, ret : %d\n",getpid(), ret);
     }
     return 0;
 }
