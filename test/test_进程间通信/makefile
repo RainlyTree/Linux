@@ -1,2 +1,2 @@
-Uname_pipe:Uname_pipe.c
+pipe:pipe.c
 		gcc $^ -o $@
