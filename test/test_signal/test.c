@@ -1,14 +1,22 @@
 #include<stdio.h>
+#include<signal.h>
 #include<string.h>
 #include<stdlib.h>
 
+//signal (int signum, sighander_t handler)
+
+void sigcallback(int signum)
+{
+    printf("%d", signum);
+}
+
 int main()
 {
-    char* lp = (char*)malloc(10);
-    memset(lp, '\0', 10);
-    strcpy(lp, "test");
-    printf("%s\n", lp);
-    free(lp);
-    lp = NULL;
+   signal(2, sigcallback) ;
+
+   while(1)
+   {
+       ;
+   }
     return 0;
 }

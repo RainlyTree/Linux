@@ -1,2 +1,2 @@
-test:test.c
+sigaction:sigaction.c
 		gcc $^ -o $@
