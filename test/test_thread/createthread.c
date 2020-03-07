@@ -7,7 +7,7 @@ void* thread_start(void* arg)
     while(1)
     {
 
-    printf("i am new thread  -  %d\n", (int*)arg);
+    printf("i am new thread  -  %d\n", (int)arg);
     sleep(1);
     }
     return NULL;
