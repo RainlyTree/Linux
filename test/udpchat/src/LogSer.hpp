@@ -54,7 +54,7 @@ class LogTime
         }
 };
 
-inline void Log(LogLevel lev, const char* file, int line, std::string& logmsg)
+inline void Log(LogLevel lev, const char* file, int line, const std::string& logmsg)
 {
     std::string level_info = Level[lev];
     std::string timer_stamp;
@@ -64,3 +64,6 @@ inline void Log(LogLevel lev, const char* file, int line, std::string& logmsg)
     std::cout << "[" << timer_stamp << " " << level_info << " " << file <<
         ":" << line << "]" << logmsg << std::endl;
 }
+
+
+#define LOG(lev, msg) Log(lev, __FILE__, __LINE__, msg)
