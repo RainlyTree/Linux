@@ -25,8 +25,6 @@ int main(int argc, char* argv[])
         return 0;
     }
     TcpSvr peerts;
-    while(1)
-    {
         struct sockaddr_in peeraddr;
         if(!ts.Accept(peerts,&peeraddr))
         {
@@ -35,6 +33,8 @@ int main(int argc, char* argv[])
         printf("svr have a new connect, ip : port ----> %s : %d\n" , 
                 inet_ntoa(peeraddr.sin_addr), 
                 ntohs( peeraddr.sin_port));
+    while(1)
+    {
         std::string buf;
         peerts.Recv(buf);
         printf("client say : %s\n", buf.c_str());
