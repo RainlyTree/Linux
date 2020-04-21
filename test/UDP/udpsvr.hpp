@@ -68,6 +68,7 @@ class UdpSvr
                 perror("recvfrom");
                 return false;
             }
+            //拷贝函数 将tmp中内容拷到buf中
             buf.assign(tmp, RecvSize);
             return true;
         }
