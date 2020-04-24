@@ -1,3 +1,12 @@
+CFLAGS=-std=c++11 -g
+LDFLAGS=-lpthread -ljsoncpp 
+
+SVRBIN=../bin/svr/ChatSvr
+
 .PHONY:ChatSvr
-ChatSvr:ChatServer.cpp
-	g++ $^ -o $@ -g -lpthread -std=c++11
+$(SVRBIN):ChatServer.cpp
+	g++ $^ -o $@ $(CFLAGS) $(LDFLAGS) 
+
+.PHONY:clean
+clean:
+	rm -f $(SVRBIN)

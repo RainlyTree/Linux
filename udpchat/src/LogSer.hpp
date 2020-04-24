@@ -59,7 +59,7 @@ class LogTime
         }
 };
 
-inline void Log(LogLevel lev, const char* file, int line, const std::string& logmsg)
+inline std::ostream& Log(LogLevel lev, const char* file, int line, const std::string& logmsg)
 {
     std::string level_info = Level[lev];
     std::string timer_stamp;
@@ -67,7 +67,8 @@ inline void Log(LogLevel lev, const char* file, int line, const std::string& log
     LogTime::GetTimeStamp1(timer_stamp);
 
     std::cout << "[" << timer_stamp << " " << level_info << " " << file <<
-        ":" << line << "]" << logmsg << std::endl;
+        ":" << line << "]" << logmsg ;
+    return std::cout;
 }
 
 

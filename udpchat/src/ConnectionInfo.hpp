@@ -8,7 +8,7 @@
 //注册信息
 struct RegInfo
 {
-    char Name_[15];
+    char NiceName_[15];
     char School_[20];
     char Passwd_[20];
 };
@@ -20,9 +20,20 @@ struct LoginInfo
     char Passwd_[20];
 };
 
+enum UserStatus
+{
+    //注册失败
+    REGFAILED = 0,
+    //成功
+    REGISTERED1,
+    LOGINFAILED,
+    LOGINED
+};
+
 //应答信息
 struct ReplyInfo
 {
+    //当前状态
     int Status;
     uint64_t UserId_;
 };
@@ -46,6 +57,8 @@ class LoginConnect
         {
             return Server_;
         }
+
+
     private:
         int Sock_;
         //用户保存ChatServer类的实例化指针
