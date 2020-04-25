@@ -5,6 +5,10 @@
 #define LOGIN 1
 #define LOGINOUT 2
 
+
+//约定双方发送的数据包最大多大
+#define MESSAGE_MAX_SIZE 1024
+
 //注册信息
 struct RegInfo
 {

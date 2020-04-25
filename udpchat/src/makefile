@@ -9,7 +9,7 @@ all:$(SVRBIN) $(CLIBIN)
 $(SVRBIN):ChatServer.cpp
 	g++ $^ -o $@ $(CFLAGS) $(LDFLAGS) 
 $(CLIBIN):ChatClient.cpp 
-	g++ $^ -o $@ -g
+	g++ $^ -o $@ $(CFLAGS) $(LDFLAGS) -lncurses
 
 .PHONY:clean
 clean:

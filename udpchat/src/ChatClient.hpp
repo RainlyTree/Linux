@@ -198,6 +198,39 @@ class ChatClient
         }
 
         
+        //udp数据收发
+        bool SendMsg(const std::string& msg)
+        {
+            struct sockaddr_in peer;
+            peer.sin_family = AF_INET;
+            peer.sin_port = htons(UdpPort_);
+            peer.sin_addr.s_addr = inet_addr(SvrIp_.c_str());
+            ssize_t send_size = sendto(UdpSock_, msg.c_str(), msg.size(), 0, (struct sockaddr*)&peer, sizeof(sockaddr));
+            if(send_size < 0)
+            {
+                LOG(ERROR, "Send Msg to Server Failed\n");
+                return false;
+            }
+            return true;
+        }
+
+
+
+        bool RecvMsg(std::string* msg)
+        {
+            char buf[MESSAGE_MAX_SIZE];
+            memset(buf, '\0',sizeof(buf));
+            struct sockaddr_in svraddr;
+            socklen_t svraddrlen = sizeof(svraddr);
+            ssize_t recv_size = recvfrom(UdpSock_, buf, sizeof(buf) - 1, 0, (struct sockaddr*)&svraddr, &svraddrlen);
+            if(recv_size < 0)
+            {
+                LOG(ERROR, "recv msg from server failed");
+                return false;
+            }
+            (*msg).assign(buf, recv_size);
+            return true;
+        }
 
     private:
         int UdpSock_;

@@ -4,6 +4,7 @@
 #include"ConnectionInfo.hpp"
 #include"LogSer.hpp"
 #include"MsgPool.hpp"
+#include"json/json.h"
 #include<string>
 #include<pthread.h>
 #include<iostream>
@@ -345,13 +346,14 @@ class ChatServer
                 //判断是否是第一次发送消息 
                 //是第一次则保存地址信息 更新状态为在线 将数据放入数据池
                 bool ret = UserMana_->IsLogin(jsonmsg.GetUserId(), cliaddr, chiaddrlen);
-                if(ret == true)
+                if(ret != true)
                 {
-                    MsgPool_->PushMsgToPool(msg);
-                    LOG(INFO, "Push msg success") << std::endl;
+                    LOG(ERROR, "discarded the msg") << msg << std::endl;
                 }
 
-                LOG(ERROR, "discarded the msg") << msg << std::endl;
+                MsgPool_->PushMsgToPool(msg);
+                LOG(INFO, "Push msg success") << std::endl;
+
             }
 
         }
