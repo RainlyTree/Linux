@@ -309,6 +309,7 @@ class ChatServer
                 LOG(ERROR, "Client shutdown connect") << std::endl;
             }
 
+            LOG(DEBUG, "UserId:Passwd") << li.UserId_ << ":" << li.Passwd_ << std::endl;
             UserMana_->Login(li.UserId_, li.Passwd_);
         }
 

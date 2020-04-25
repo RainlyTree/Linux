@@ -24,8 +24,8 @@ enum UserStatus
 {
     //注册失败
     REGFAILED = 0,
-    //成功
-    REGISTERED1,
+    //成功REGISTERED
+    REGISTERED,
     LOGINFAILED,
     LOGINED
 };

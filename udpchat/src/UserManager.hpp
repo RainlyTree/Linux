@@ -1,5 +1,9 @@
 #pragma once 
 #include"LogSer.hpp"
+
+
+#include<sys/socket.h>
+#include<netinet/in.h>
 #include<vector>
 #include<unordered_map>
 #include<cstring>
@@ -9,8 +13,9 @@
 
 #define OFFLINE 0
 #define REGISTERED 1
-#define USERLOGING 2
-#define ONLINE 3
+#define USERLOGINED 2
+#define ONLINE 3 
+
 
 //状态
 //enum Sta
@@ -145,17 +150,19 @@ class UserManager
                 if(Passwd == iter->second.GetPasswd())
                 {
                     //密码正确
-                    iter->second.GetUserStatus() = USERLOGING;
+                    iter->second.GetUserStatus() = USERLOGINED;
                     LoginState = 0;
                 }
                 else 
                 {
+                    LOG(ERROR, "User Passwd is not correct passwd is:") << Passwd << std::endl;
                     LoginState = -1;
                     //密码错误
                 }
             }
             else 
             {
+                LOG(ERROR, "UserId not found UserId is") << Passwd << std::endl;
                 LoginState = -1;
                 //没有查找到
             }
@@ -200,7 +207,7 @@ class UserManager
             }
 
             //第一次发送消息
-            if(iter->second.GetUserStatus() == USERLOGING)
+            if(iter->second.GetUserStatus() == USERLOGINED)
             {
                 iter->second.SetCliAddr(cliudp);
                 iter->second.SetCliAddrLen(cliaddrlen);
