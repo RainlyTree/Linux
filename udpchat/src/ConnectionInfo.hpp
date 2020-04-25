@@ -20,7 +20,7 @@ struct RegInfo
 //登录信息
 struct LoginInfo
 {
-    uint64_t UserId_;
+    uint32_t UserId_;
     char Passwd_[20];
 };
 
@@ -39,7 +39,7 @@ struct ReplyInfo
 {
     //当前状态
     int Status;
-    uint64_t UserId_;
+    uint32_t UserId_;
 };
 
 

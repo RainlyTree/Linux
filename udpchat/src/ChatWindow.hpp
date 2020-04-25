@@ -8,6 +8,7 @@
 
 
 #include"ChatClient.hpp"
+#include"Message.hpp"
 
 class ChatWindow;
 
@@ -111,6 +112,102 @@ class ChatWindow
 
         }
 
+
+        //y 对应 行
+        //x 对应 列
+        void PutStringToWin(WINDOW* win, int y, int x, const std::string& msg)
+        {
+            mvwaddstr(win , y, x, msg.c_str());
+            pthread_mutex_lock(&lock_);
+            wrefresh(win);
+            pthread_mutex_unlock(&lock_);
+        }
+
+        void GetStringFromWin(WINDOW* win, std::string* Data)
+        {
+            char buf[1024] = {0};
+            memset(buf, '\0', sizeof(buf));
+            wgetnstr(win, buf, sizeof(buf) - 1);
+            (*Data).assign(buf, strlen(buf));
+        }
+
+        static void RunHeader(ChatWindow* cw)
+        {
+            //绘制窗口
+            int y, x;
+            unsigned int  pos = 1;
+            //标识是否需要改变输出的方向
+            int flag = 0;
+            std::string msg = "welcome to use is project";
+            while(1)
+            {
+                cw->DrawHeader();
+                //getmaxyx 返回窗口最大的行数存储在y当中，最大列存储在x当中
+                getmaxyx(cw->header_, y, x);
+                //欢迎语
+                cw->PutStringToWin(cw->header_, y / 2, pos , msg);
+                //处理左边边界
+                if(pos < 2)
+                {
+                    flag = 0;
+                }
+                else if(pos > x - msg.size() - 2)
+                {
+                    flag = 1;
+                }
+
+
+                if(flag == 0)
+                {
+                    pos++;
+                }
+                else 
+                {
+                    pos--;
+                }
+
+
+                sleep(1);
+            }
+        }
+
+        static void RunOutput(ChatWindow* cw)
+        {
+            while(1)
+            {
+                cw->DrawOutput();
+                sleep(1);
+            }
+        }
+
+        static void RunIntput(ChatWindow* cw, ChatClient* cc)
+        {
+            std::string send_msg;
+            //名称  学校 msg 用户id
+            Message msg;
+            msg.SetNickName(cc->GetMySelf().NiceName_);
+            msg.SetSchool(cc->GetMySelf().School_);
+            msg.SetUserId(cc->GetMySelf().UserId_);
+            std::string tips = "please Enter# ";
+            
+            while(1)
+            {
+                cw->DrawInput();
+                cw->PutStringToWin(cw->input_, 2, 2, tips);
+                cw->GetStringFromWin(cw->input_, &send_msg);
+                msg.SetMeg(send_msg);
+                sleep(1);
+            }
+        }
+
+        static void RunUserList(ChatWindow* cw)
+        {
+            while(1)
+            {
+                cw->DrawUserList();
+                sleep(1);
+            }
+        }
         static void* DrawWindow(void* arg)
         {
             Param* pm = (Param*)arg; 
@@ -120,16 +217,16 @@ class ChatWindow
             switch(thread_num)
             {
                 case 0:
-                    cw->DrawHeader();
+                    RunHeader(cw);
                     break;
                 case 1:
-                    cw->DrawOutput();
+                    RunOutput(cw);
                     break;
                 case 2:
-                    cw->DrawUserList();
+                    RunUserList(cw);
                     break;
                 case 3:
-                    cw->DrawInput();
+                    RunIntput(cw, cc);
                     break;
                 default:
                     break;
@@ -153,6 +250,11 @@ class ChatWindow
                     exit(1);
                 }
                 threads_.push_back(tid);
+            }
+
+            for(i = 0; i < 4; ++i)
+            {
+                pthread_join(threads_[i], NULL);
             }
         }
     private:

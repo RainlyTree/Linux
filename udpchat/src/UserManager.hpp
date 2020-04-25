@@ -35,7 +35,7 @@ class UserInfo
     public:
         //注册和登陆使用TCP 不应保存 应该等到第一次使用UDP发送消息时保存UDP
         UserInfo(const std::string& NickName, const std::string& School, 
-                const uint64_t UserId, const std::string& Passwd)
+                const uint32_t UserId, const std::string& Passwd)
             :NickName_(NickName)
             ,School_(School)
             ,UserId_(UserId)
@@ -86,7 +86,7 @@ class UserInfo
         std::string NickName_;
         std::string School_;
         //用户ID
-        uint64_t UserId_;
+        uint32_t UserId_;
         std::string Passwd_;
         //保存 udp客户端地址信息
         struct sockaddr_in CliAddr_;
@@ -115,7 +115,7 @@ class UserManager
             pthread_mutex_destroy(&Lock_);
         }
 
-        int Register(const std::string& NickName, const std::string& School, const std::string& Passwd,uint64_t* UserId)
+        int Register(const std::string& NickName, const std::string& School, const std::string& Passwd,uint32_t* UserId)
         {
             if(NickName.size() == 0 || School.size() == 0 || Passwd.size() == 0)
                 return -1;
@@ -133,7 +133,7 @@ class UserManager
 
         }
 
-        int Login(const uint64_t& UserId, const std::string& Passwd)
+        int Login(const uint32_t& UserId, const std::string& Passwd)
         {
             if(Passwd.size() < 0)
                 return -1;
@@ -174,7 +174,7 @@ class UserManager
         
         int LOginOut();
 
-        bool IsLogin(uint64_t UserId, const struct sockaddr_in& cliudp, const socklen_t& cliaddrlen)
+        bool IsLogin(uint32_t UserId, const struct sockaddr_in& cliudp, const socklen_t& cliaddrlen)
         {
             if(sizeof(cliudp) < 0 || cliaddrlen < 0)
             {
@@ -227,11 +227,11 @@ class UserManager
 
     private:
         //保存注册用户信息
-        std::unordered_map<uint64_t, UserInfo> UserMap_;
+        std::unordered_map<uint32_t, UserInfo> UserMap_;
         //需要进行保护
         pthread_mutex_t Lock_;
         //保存在线用户信息
         std::vector<UserInfo> OnlineUserVec_;
         //预分配用户id
-        uint64_t PerpareUserId_;
+        uint32_t PerpareUserId_;
 };

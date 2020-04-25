@@ -19,7 +19,7 @@ struct MySelf
     std::string NiceName_;
     std::string School_;
     std::string Passwd_;
-    uint64_t UserId_;
+    uint32_t UserId_;
 };
 
 class ChatClient
@@ -230,6 +230,11 @@ class ChatClient
             }
             (*msg).assign(buf, recv_size);
             return true;
+        }
+
+        MySelf& GetMySelf()
+        {
+            return me_;
         }
 
     private:

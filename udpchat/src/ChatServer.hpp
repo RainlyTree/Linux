@@ -201,7 +201,7 @@ class ChatServer
             }
 
 
-            uint64_t UserId = -1;
+            uint32_t UserId = -1;
             int UserStatus = -1;
 
             //收到正常请求标识
@@ -274,7 +274,7 @@ class ChatServer
             return NULL;
         }
 
-        int DealRegister(int sock,uint64_t* UserId)
+        int DealRegister(int sock,uint32_t* UserId)
         {
             //接收注册请求
             RegInfo ri;
