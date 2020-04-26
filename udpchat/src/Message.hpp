@@ -37,6 +37,21 @@ class Message
             return UserId_;
         }
 
+        std::string& GetNickName()
+        {
+            return NickName_;
+        }
+
+        std::string& GetSchool()
+        {
+            return School_;
+        }
+
+        std::string& GetMsg()
+        {
+            return Msg_;
+        }
+
         void SetNickName(std::string& NickName)
         {
             NickName_ = NickName;

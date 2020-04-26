@@ -7,6 +7,7 @@
 #include<sys/types.h>
 #include<string>
 #include<iostream>
+#include<vector>
 
 #include"LogSer.hpp"
 #include"ConnectionInfo.hpp"
@@ -237,6 +238,23 @@ class ChatClient
             return me_;
         }
 
+        void PushUser(std::string& user_info)
+        {
+            auto iter = OnlineUser.begin();
+            while(iter != OnlineUser.end())
+            {
+                if(*iter == user_info)
+                    return;
+            }
+
+            OnlineUser.push_back(user_info);
+        }
+
+        std::vector<std::string>& GetOnlieUser()
+        {
+            return OnlineUser;
+        }
+
     private:
         int UdpSock_;
         int UdpPort_;
@@ -249,4 +267,7 @@ class ChatClient
 
         //客户端信息
         MySelf me_;
+
+        //保存在线用户
+        std::vector<std::string> OnlineUser;
 };

@@ -100,6 +100,9 @@ class ChatServer
                 exit(5);
             }
 
+            int opt = 1;
+            setsockopt(TcpSock_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+
             struct sockaddr_in tcpaddr;
             tcpaddr.sin_family = AF_INET;
             tcpaddr.sin_port = htons(TcpPort_);

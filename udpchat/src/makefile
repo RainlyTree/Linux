@@ -1,8 +1,8 @@
 CFLAGS=-std=c++11 -g
 LDFLAGS=-lpthread -ljsoncpp 
 
-SVRBIN=./ChatSvr
-CLIBIN=./ChatCli
+SVRBIN=../bin/svr/ChatSvr
+CLIBIN=../bin/cli/ChatCli
 
 .PHONY:
 all:$(SVRBIN) $(CLIBIN)

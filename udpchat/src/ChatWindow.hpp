@@ -171,13 +171,40 @@ class ChatWindow
             }
         }
 
-        static void RunOutput(ChatWindow* cw)
+        static void RunOutput(ChatWindow* cw, ChatClient* cc)
         {
+            std::string recv_msg;
+            Message msg;
+            cw->DrawOutput();
+            int line = 1;
+            int y, x;
             while(1)
             {
-                cw->DrawOutput();
-                sleep(1);
+                getmaxyx(cw->output_, y, x);
+                cc->RecvMsg(&recv_msg);
+                //反序列化
+                msg.Deserialize(recv_msg);
+                //展示数据
+                std::string show_msg;
+                show_msg += msg.GetNickName() + "-";
+                show_msg += msg.GetSchool() + ":";
+                show_msg += msg.GetMsg();
+                if(line > y - 2)
+                {
+                    line = 1;
+                    cw->DrawOutput();
+                }
+
+                cw->PutStringToWin(cw->output_, line, 1, show_msg);
+                ++line;
+
+                std::string user_info;
+                user_info += msg.GetNickName() + "-";
+                user_info += msg.GetSchool() ;
+
+                cc->PushUser(user_info);
             }
+
         }
 
         static void RunIntput(ChatWindow* cw, ChatClient* cc)
@@ -188,6 +215,8 @@ class ChatWindow
             msg.SetNickName(cc->GetMySelf().NiceName_);
             msg.SetSchool(cc->GetMySelf().School_);
             msg.SetUserId(cc->GetMySelf().UserId_);
+            //用户输入的原始信息
+            std::string user_enter_msg;
             std::string tips = "please Enter# ";
             
             while(1)
@@ -195,16 +224,30 @@ class ChatWindow
                 cw->DrawInput();
                 cw->PutStringToWin(cw->input_, 2, 2, tips);
                 cw->GetStringFromWin(cw->input_, &send_msg);
-                msg.SetMeg(send_msg);
+                msg.SetMeg(user_enter_msg);
+
+
+                msg.serialize(&send_msg);
+
+                cc->SendMsg(send_msg);
+
                 sleep(1);
             }
         }
 
-        static void RunUserList(ChatWindow* cw)
+        static void RunUserList(ChatWindow* cw, ChatClient* cc)
         {
+            int y, x;
             while(1)
             {
                 cw->DrawUserList();
+                getmaxyx(cw->user_list_, y, x);
+                std::vector<std::string> UserList = cc->GetOnlieUser();
+                for(auto& e : UserList)
+                {
+                    int line = 1;
+                    cw->PutStringToWin(cw->user_list_, line++, 1, e);
+                }
                 sleep(1);
             }
         }
@@ -220,10 +263,10 @@ class ChatWindow
                     RunHeader(cw);
                     break;
                 case 1:
-                    RunOutput(cw);
+                    RunOutput(cw, cc);
                     break;
                 case 2:
-                    RunUserList(cw);
+                    RunUserList(cw, cc);
                     break;
                 case 3:
                     RunIntput(cw, cc);
