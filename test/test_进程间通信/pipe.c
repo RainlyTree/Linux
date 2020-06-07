@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<unistd.h>
+#include<fcntl.h>
 
 int main()
 {
@@ -10,6 +11,11 @@ int main()
         perror("error");
         return 0;
     }
+
+    //非阻塞设置
+    int flag = fcntl(fd[1], F_GETFL, 0);
+    flag |= O_NONBLOCK;
+    fcntl(fd[1], F_SETFL, flag);
 
     int tmp = fork();
     if(tmp == 0)
