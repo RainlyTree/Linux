@@ -7,7 +7,7 @@
 
 void sigcallback(int signum)
 {
-    printf("%d", signum);
+    printf("signum %d\n", signum);
 }
 
 int main()
