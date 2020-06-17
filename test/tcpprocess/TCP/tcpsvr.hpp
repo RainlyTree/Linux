@@ -1,3 +1,4 @@
+#pragma once
 #include<stdio.h>
 #include<stdlib.h>
 #include<unistd.h>
@@ -29,7 +30,7 @@ class TcpSvr
             return true;
         }
 
-        bool Bind(std::string& ip, uint16_t port)
+        bool Bind(const std::string& ip, uint16_t port)
         {
             struct sockaddr_in addr;
             addr.sin_family = AF_INET;
@@ -122,6 +123,16 @@ class TcpSvr
         {
             close(Sockfd_);
             Sockfd_ = -1;
+        }
+
+        void Setfd(int fd)
+        {
+            Sockfd_ = fd;
+        }
+
+        int  Getfd()
+        {
+            return Sockfd_;
         }
 
     private:
