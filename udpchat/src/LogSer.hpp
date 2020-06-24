@@ -6,7 +6,7 @@
 #include<iostream>
 
 //日志格式
-//[时间 info/warning/error/fatal/debug 文件  行号] 具体错误信息
+//[时间 info/warning/error/fatal/debug 文件 行号] 具体错误信息
 
 
 const char* Level[] = 

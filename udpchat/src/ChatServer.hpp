@@ -27,11 +27,11 @@ class ChatServer
         ChatServer()
             :UdpSock_(-1)
             ,UdpPort_(UDP_PORT)
-            ,MsgPool_(nullptr)
             ,TcpSock_(-1)
             ,TcpPort_(TCP_PROT)
             ,UserMana_(nullptr)
         {
+            MsgPool_ = new MsgPool();
         }
 
         ~ChatServer()
@@ -65,14 +65,12 @@ class ChatServer
             addr.sin_port = htons(UdpPort_);
             //0.0.0.0 表示任意地址
             addr.sin_addr.s_addr = inet_addr("0.0.0.0");
-
-            int ret = bind(UdpSock_, (struct sockaddr*)&addr,sizeof(addr));
+            int ret = bind(UdpSock_, (struct sockaddr*)&addr, sizeof(addr));
             if(ret < 0)
             {
                 LOG(FATAL, "bind addr failed") << std::endl;
                 exit(2);
             }
-
             LOG(INFO, "Udp bind success") << std::endl;
 
             //对用户管理初始化
@@ -83,13 +81,6 @@ class ChatServer
                 exit(8);
             }
 
-            //初始化数据池
-            MsgPool_ = new MsgPool();
-            if(!MsgPool_)
-            {
-                LOG(FATAL,"Create MsgPool failed") << std::endl;
-                exit(3);
-            }
             LOG(INFO, "Create MsgPool success") << std::endl;
 
             //创建TCP-socket 
@@ -378,7 +369,7 @@ class ChatServer
             }
         }
         
-        //消息发送个单个客户端
+        //发送消息给单个客户端
         void SendMsg(const std::string& msg, struct sockaddr_in& cliaddr,socklen_t& len)
         {
             ssize_t sendsize = 
