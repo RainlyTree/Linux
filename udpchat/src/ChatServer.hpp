@@ -29,9 +29,9 @@ class ChatServer
             ,UdpPort_(UDP_PORT)
             ,TcpSock_(-1)
             ,TcpPort_(TCP_PROT)
-            ,UserMana_(nullptr)
         {
             MsgPool_ = new MsgPool();
+            UserMana_ = new UserManager();
         }
 
         ~ChatServer()
@@ -51,7 +51,7 @@ class ChatServer
         //调用InitServer函数初始化UDP
         void InitServer()
         {
-            //创建套接字
+            //创建UDP套接字 用于通信
             UdpSock_ = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
             if(UdpSock_ < 0)
             {
@@ -73,17 +73,7 @@ class ChatServer
             }
             LOG(INFO, "Udp bind success") << std::endl;
 
-            //对用户管理初始化
-            UserMana_ = new UserManager();
-            if(!UserMana_)
-            {
-                LOG(FATAL, "Create Usermanager failed") << std::endl;
-                exit(8);
-            }
-
-            LOG(INFO, "Create MsgPool success") << std::endl;
-
-            //创建TCP-socket 
+            //创建TCP-socket 用于用户注册与登陆
             TcpSock_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
             if(TcpSock_ < 0)
             {
@@ -400,5 +390,5 @@ class ChatServer
         int TcpPort_;
 
         //用户管理
-        UserManager* UserMana_;
+       UserManager* UserMana_;
 };

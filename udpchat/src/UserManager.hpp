@@ -11,10 +11,10 @@
 #include<iostream>
 #include<string>
 
-#define OFFLINE 0
-#define REGISTERED 1
+#define OFFLINE     0
+#define REGISTERED  1
 #define USERLOGINED 2
-#define ONLINE 3 
+#define ONLINE      3 
 
 
 //状态
@@ -226,11 +226,11 @@ class UserManager
         }
 
     private:
-        //保存注册用户信息
+        //保存注册用户信息 ---tcp
         std::unordered_map<uint32_t, UserInfo> UserMap_;
         //需要进行保护
         pthread_mutex_t Lock_;
-        //保存在线用户信息
+        //保存在线用户信息 ---udp
         std::vector<UserInfo> OnlineUserVec_;
         //预分配用户id
         uint32_t PerpareUserId_;

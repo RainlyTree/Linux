@@ -1,7 +1,6 @@
 #Linux通过udp实现群聊系统的功能
 
 
-
 #使用TCP服务实现客户注册和登陆
 #客户注册 register() 
      1.用户昵称  NickName_ 
