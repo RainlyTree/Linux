@@ -1,10 +1,5 @@
 #pragma once
-#include"Message.hpp"
-#include"UserManager.hpp"
-#include"ConnectionInfo.hpp"
-#include"LogSer.hpp"
-#include"MsgPool.hpp"
-#include"json/json.h"
+#include<stdio.h>
 #include<string>
 #include<pthread.h>
 #include<iostream>
@@ -13,6 +8,13 @@
 #include<arpa/inet.h>
 #include<stdlib.h>
 #include<sys/types.h>
+
+#include"ConnectionInfo.hpp"
+#include"LogSer.hpp"
+#include"MsgPool.hpp"
+#include"UserManager.hpp"
+#include"Message.hpp"
+#include"json/json.h"
 
 #define TCP_PROT 17778
 #define UDP_PORT 17777

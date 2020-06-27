@@ -111,6 +111,7 @@ class ChatClient
                 if(PasswdAgain == PasswdOne)
                 {
                     strcpy(ri.Passwd_ , PasswdOne.c_str());
+                    break;
                 }
                 else 
                 {

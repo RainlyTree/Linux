@@ -5,6 +5,16 @@
 #define LOGIN 1
 #define LOGINOUT 2
 
+enum UserStatus
+{
+    //注册失败 
+    REGFAILED = 0,
+    //成功REGISTERED
+    REGISTERED,
+    //登陆失败
+    LOGINFAILED,
+    LOGINED
+};
 
 //约定双方发送的数据包最大多大
 #define MESSAGE_MAX_SIZE 1024
@@ -24,15 +34,6 @@ struct LoginInfo
     char Passwd_[20];
 };
 
-enum UserStatus
-{
-    //注册失败
-    REGFAILED = 0,
-    //成功REGISTERED
-    REGISTERED,
-    LOGINFAILED,
-    LOGINED
-};
 
 //应答信息
 struct ReplyInfo

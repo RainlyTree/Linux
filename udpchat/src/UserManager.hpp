@@ -1,7 +1,7 @@
 #pragma once 
 #include"LogSer.hpp"
 
-
+#include<stdio.h>
 #include<sys/socket.h>
 #include<netinet/in.h>
 #include<vector>
@@ -17,19 +17,6 @@
 #define ONLINE      3 
 
 
-//状态
-//enum Sta
-/*{
-    //未在线
-    OFFLINE = 0,
-    //已经注册完成
-    REGISTERED,
-    //登陆完成
-    LOGINED,
-    //在线
-    ONLINE,
-};
-*/
 class UserInfo
 {
     public:
@@ -127,6 +114,7 @@ class UserManager
             //插入到map中
             UserMap_.insert(std::make_pair(PerpareUserId_, userinfo));
             *UserId = PerpareUserId_;
+            //预ID增加
             ++PerpareUserId_;
             pthread_mutex_unlock(&Lock_);
             return 0;
@@ -138,6 +126,7 @@ class UserManager
             if(Passwd.size() < 0)
                 return -1;
 
+            //返回的登陆状态
             int LoginState = -1;
             //查找是否存在这样的id
             //1.不存在  

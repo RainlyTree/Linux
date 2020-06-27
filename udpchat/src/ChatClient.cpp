@@ -58,7 +58,7 @@ int main(int argc,char* argv[])
                 while(1)
                 {
                     ChatWindow* cw = new ChatWindow();
-                    cw->Start();
+                    cw->Start(cc);
                 }
             }
         }
