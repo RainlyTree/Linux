@@ -6,6 +6,7 @@
 class Message
 {
     public:
+        //序列化
         void Deserialize(std::string Message)
         {
             Json::Reader reader;

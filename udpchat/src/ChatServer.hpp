@@ -276,8 +276,14 @@ class ChatServer
                 //特殊处理对端关闭
             }
             //调用用户管理模块处理
-            UserMana_->Register(ri.NiceName_,ri.School_, ri.Passwd_, UserId);
+            int ret = UserMana_->Register(ri.NiceName_,ri.School_, ri.Passwd_, UserId);
             //返回注册成功ID
+            if(ret == -1)
+            {
+                return REGFAILED;
+            }
+
+            return REGISTERED;
             //返回状态
         }
 
@@ -297,7 +303,12 @@ class ChatServer
             }
 
             LOG(DEBUG, "UserId:Passwd") << li.UserId_ << ":" << li.Passwd_ << std::endl;
-            UserMana_->Login(li.UserId_, li.Passwd_);
+            int ret = UserMana_->Login(li.UserId_, li.Passwd_);
+            if(ret == -1)
+            {
+                return LOGINFAILED;
+            }
+            return LOGINED;
         }
 
         int DealLoginOut()
