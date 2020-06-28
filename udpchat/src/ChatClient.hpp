@@ -53,16 +53,17 @@ class ChatClient
                 exit(1);
             }
 
+        }
+
+        bool Connect2Server()
+        {
+            //创建TCPsocket
             TcpSock_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
             if(TcpSock_ < 0)
             {
                 LOG(ERROR, "client create udp socket failed") << std::endl;
                 exit(2);
             }
-        }
-
-        bool Connect2Server()
-        {
             //服务端 地址信息填充
             struct sockaddr_in peer;
             peer.sin_family = AF_INET;
@@ -119,12 +120,13 @@ class ChatClient
                 }
             }
 
-            send_size = send(TcpPort_, &ri, sizeof(ri), 0);
+            send_size = send(TcpSock_, &ri, sizeof(ri), 0);
             if(send_size < 0)
             {
-                LOG(ERROR, "Send Register type failed") << std::endl;
+                LOG(ERROR, "Send Register message failed") << std::endl;
                 return false;
             }
+
             //获取用户ID
             struct ReplyInfo resp;
             ssize_t recv_size = recv(TcpSock_, &resp, sizeof(resp), 0);
@@ -140,7 +142,7 @@ class ChatClient
             }
             if(resp.Status == REGISTERED)
             {
-                printf("注册成功, UserId = %lu\n", resp.UserId_);
+                printf("注册成功, UserId = %u\n", resp.UserId_);
                 //保存UserId
                 me_.NiceName_ = ri.NiceName_;
                 me_.School_ = ri.School_;
@@ -151,6 +153,7 @@ class ChatClient
             }
             LOG(ERROR, "Register failed") << std::endl;
             printf("注册失败\n");
+            close(TcpSock_);
             return false;
         }
 
@@ -171,8 +174,12 @@ class ChatClient
             }
             //发送登陆数据
             struct LoginInfo li;
-            li.UserId_ = me_.UserId_;
-            strcpy(li.Passwd_, me_.Passwd_.c_str());
+            std::cout << "UserId:";
+            std::cin >> li.UserId_ ;
+            std::cout << "Passwd:";
+            std::cin >> li.Passwd_;
+            //li.UserId_ = me_.UserId_;
+            //strcpy(li.Passwd_, me_.Passwd_.c_str());
 
             send_size = send(TcpSock_, &li, sizeof(li), 0);
             if(send_size < 0)

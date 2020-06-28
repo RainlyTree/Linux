@@ -73,7 +73,7 @@ class ChatServer
                 LOG(FATAL, "bind addr failed") << std::endl;
                 exit(2);
             }
-            LOG(INFO, "Udp bind success") << std::endl;
+            LOG(INFO, "Udp bind success") << "0.0.0.0:17777" << std::endl;
 
             //创建TCP-socket 用于用户注册与登陆
             TcpSock_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
