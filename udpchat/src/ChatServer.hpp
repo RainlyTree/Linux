@@ -347,9 +347,12 @@ class ChatServer
                 {
                     LOG(ERROR, "discarded the msg") << msg << std::endl;
                 }
+                else 
+                {
+                    MsgPool_->PushMsgToPool(msg);
+                    LOG(INFO, "Push msg success") << std::endl;
+                }
 
-                MsgPool_->PushMsgToPool(msg);
-                LOG(INFO, "Push msg success") << std::endl;
 
             }
 

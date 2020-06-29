@@ -26,7 +26,7 @@ class Message
             val["NickName_"] = NickName_;
             val["School_"] = School_;
             val["Msg_"] = Msg_;
-            val[UserId_] = UserId_;
+            val["UserId_"] = UserId_;
 
             Json::FastWriter writer;
             *msg = writer.write(val);
