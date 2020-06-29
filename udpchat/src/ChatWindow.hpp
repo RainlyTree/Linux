@@ -38,7 +38,9 @@ class ChatWindow
         {
             threads_.clear();
             pthread_mutex_init(&lock_, NULL);
+            //初始化屏幕
             initscr();
+            //不显示光标
             curs_set(0);
         }
 
@@ -117,6 +119,7 @@ class ChatWindow
         //x 对应 列
         void PutStringToWin(WINDOW* win, int y, int x, const std::string& msg)
         {
+            //mvwaddstr 将字符放入窗口函数
             mvwaddstr(win , y, x, msg.c_str());
             pthread_mutex_lock(&lock_);
             wrefresh(win);
@@ -209,14 +212,13 @@ class ChatWindow
 
         static void RunIntput(ChatWindow* cw, ChatClient* cc)
         {
+            //用户输入的原始信息
             std::string send_msg;
             //名称  学校 msg 用户id
             Message msg;
             msg.SetNickName(cc->GetMySelf().NiceName_);
             msg.SetSchool(cc->GetMySelf().School_);
             msg.SetUserId(cc->GetMySelf().UserId_);
-            //用户输入的原始信息
-            std::string user_enter_msg;
             std::string tips = "please Enter# ";
             
             while(1)
@@ -224,7 +226,7 @@ class ChatWindow
                 cw->DrawInput();
                 cw->PutStringToWin(cw->input_, 2, 2, tips);
                 cw->GetStringFromWin(cw->input_, &send_msg);
-                msg.SetMeg(user_enter_msg);
+                msg.SetMeg(send_msg);
 
 
                 msg.serialize(&send_msg);
@@ -246,7 +248,7 @@ class ChatWindow
                 for(auto& e : UserList)
                 {
                     int line = 1;
-                    cw->PutStringToWin(cw->user_list_, line++, 1, e);
+                    cw->PutStringToWin(cw->user_list_, 1, line++, e);
                 }
                 sleep(1);
             }

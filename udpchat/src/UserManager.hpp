@@ -21,9 +21,9 @@ class UserInfo
 {
     public:
         //注册和登陆使用TCP 不应保存 应该等到第一次使用UDP发送消息时保存UDP
-        UserInfo(const std::string& NickName, const std::string& School, 
-                const uint32_t UserId, const std::string& Passwd)
-            :NickName_(NickName)
+        UserInfo(const std::string& NiceName = "", const std::string& School = "", 
+                const uint32_t UserId = -1, const std::string& Passwd = "")
+            :NiceName_(NiceName)
             ,School_(School)
             ,UserId_(UserId)
             ,Passwd_(Passwd)
@@ -38,6 +38,15 @@ class UserInfo
             UserStatus_ = Status;
         }
 
+        std::string& GetNickName()
+        {
+            return NiceName_;
+        }
+
+        std::string& GetSchool()
+        {
+            return School_;
+        }
 
         std::string& GetPasswd()
         {
@@ -70,7 +79,7 @@ class UserInfo
         }
 
     private:
-        std::string NickName_;
+        std::string NiceName_;
         std::string School_;
         //用户ID
         uint32_t UserId_;
@@ -102,13 +111,13 @@ class UserManager
             pthread_mutex_destroy(&Lock_);
         }
 
-        int Register(const std::string& NickName, const std::string& School, const std::string& Passwd,uint32_t* UserId)
+        int Register(const std::string& NiceName, const std::string& School, const std::string& Passwd,uint32_t* UserId)
         {
-            if(NickName.size() == 0 || School.size() == 0 || Passwd.size() == 0)
+            if(NiceName.size() == 0 || School.size() == 0 || Passwd.size() == 0)
                 return -1;
 
             pthread_mutex_lock(&Lock_);
-            UserInfo userinfo(NickName, School,  PerpareUserId_, Passwd);
+            UserInfo userinfo(NiceName, School,  PerpareUserId_, Passwd);
             //更改当前用户的状态,改为已注册状态
             userinfo.SetUserStatus(REGISTERED);
             //插入到map中
@@ -212,6 +221,11 @@ class UserManager
         void GetOnlineUserInfo(std::vector<UserInfo>* vec)
         {
             *vec = OnlineUserVec_;
+        }
+
+        void GetUserInfoOff(uint32_t id, UserInfo* p_mesage)
+        {
+            p_mesage = &UserMap_[id];
         }
 
     private:

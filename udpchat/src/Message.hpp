@@ -16,7 +16,8 @@ class Message
             NickName_ = val["NickName_"].asString();
             School_ = val["School_"].asString();
             Msg_ = val["Msg_"].asString();
-            UserId_ = val["UserId_"].asInt();
+            UserId_ = val["UserId_"].asInt();            
+
         }
 
 

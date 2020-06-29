@@ -1,4 +1,5 @@
 #pragma once 
+#include<string.h>
 #include<stdio.h>
 #include<stdlib.h>
 #include<unistd.h>
@@ -96,7 +97,7 @@ class ChatClient
             }
             //发送注册内容
             struct RegInfo ri;
-            std::cout << "Please Enter Your NickName:";
+            std::cout << "Please Enter Your NiceName:";
             std::cin >> ri.NiceName_;
             std::cout << "Please Enter Your School:";
             std::cin >> ri.School_;
@@ -178,6 +179,8 @@ class ChatClient
             std::cin >> li.UserId_ ;
             std::cout << "Passwd:";
             std::cin >> li.Passwd_;
+            me_.UserId_ = li.UserId_; 
+            me_.Passwd_ = li.Passwd_;
             //li.UserId_ = me_.UserId_;
             //strcpy(li.Passwd_, me_.Passwd_.c_str());
 

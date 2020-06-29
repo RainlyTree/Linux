@@ -187,19 +187,20 @@ class ChatServer
             }
 
 
-            uint32_t UserId = -1;
+            //uint32_t UserId = UINT32_MAX;
             int UserStatus = -1;
 
+            ReplyInfo ri;
             //收到正常请求标识
             switch(LoginType)
             {
                 case REGISTER:
                     //使用用户管理模块注册
-                    UserStatus =  cs->DealRegister(lc->GetTcpSock(), &UserId); 
+                    UserStatus =  cs->DealRegister(lc->GetTcpSock(), &ri); 
                     break;
                 case LOGIN:
                     //使用用户管理模块登陆
-                    UserStatus = cs->DealLogin(lc->GetTcpSock());
+                    UserStatus = cs->DealLogin(lc->GetTcpSock(), &ri);
                     break;
                 case LOGINOUT:
                     //使用用户管理模块退出
@@ -213,9 +214,8 @@ class ChatServer
 
             
             //服务端回复 send(sock, buf, size, 0)
-            ReplyInfo ri;
             ri.Status = UserStatus;
-            ri.UserId_ = UserId;
+            //ri.UserId_ = UserId;
             ssize_t sendsize = send(lc->GetTcpSock(), &ri, sizeof(ri), 0);
             if(sendsize < 0)
             {
@@ -260,7 +260,7 @@ class ChatServer
             return NULL;
         }
 
-        int DealRegister(int sock,uint32_t* UserId)
+        int DealRegister(int sock, ReplyInfo* ry)
         {
             //接收注册请求
             RegInfo ri;
@@ -276,7 +276,9 @@ class ChatServer
                 //特殊处理对端关闭
             }
             //调用用户管理模块处理
-            int ret = UserMana_->Register(ri.NiceName_,ri.School_, ri.Passwd_, UserId);
+            int ret = UserMana_->Register(ri.NiceName_,ri.School_, ri.Passwd_, &ry->UserId_);
+            ry->NiceName_ = ri.NiceName_;
+            ry->School_ = ri.School_;
             //返回注册成功ID
             if(ret == -1)
             {
@@ -287,7 +289,7 @@ class ChatServer
             //返回状态
         }
 
-        int DealLogin(int sock)
+        int DealLogin(int sock, struct ReplyInfo* Lo_mes)
         {
             struct LoginInfo li;
             ssize_t recvsize = recv(sock, &li, sizeof(li), 0 );
@@ -308,6 +310,13 @@ class ChatServer
             {
                 return LOGINFAILED;
             }
+            Lo_mes->UserId_ = li.UserId_;
+            UserInfo p_mes;
+            UserMana_->GetUserInfoOff(li.UserId_, &p_mes);
+
+            Lo_mes->NiceName_ = p_mes.GetNickName();
+            Lo_mes->School_ = p_mes.GetSchool();
+
             return LOGINED;
         }
 
