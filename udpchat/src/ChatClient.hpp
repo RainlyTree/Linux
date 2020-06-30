@@ -130,7 +130,7 @@ class ChatClient
 
             //获取用户ID
             ReplyInfo resp;
-            ssize_t recv_size = recv(TcpSock_, &resp, sizeof(ReplyInfo), 0);
+            ssize_t recv_size = recv(TcpSock_, &resp, sizeof(resp), 0);
             if(recv_size < 0)
             {
                 LOG(ERROR, "recv register response failed") << std::endl;
@@ -200,6 +200,11 @@ class ChatClient
                 LOG(ERROR,"Peer shutdown connect ") << std::endl;
                 return false;
             }
+            else if(recv_size == 0)
+            {
+                LOG(ERROR, "Peer shutdown connect") << std::endl;
+                return false;
+            }
             if(resp.Status != LOGINED)
             {
                 LOG(ERROR, "Login Failed Status is ") << resp.Status<< std::endl;
@@ -261,6 +266,7 @@ class ChatClient
             {
                 if((*iter) == user_info)
                     return;
+                ++iter;
             }
 
             OnlineUser.push_back(user_info);

@@ -228,7 +228,6 @@ class ChatWindow
                 cw->GetStringFromWin(cw->input_, &user_enter_msg);
                 msg.SetMeg(user_enter_msg);
 
-
                 msg.serialize(&send_msg);
                 cc->SendMsg(send_msg);
 
@@ -246,7 +245,7 @@ class ChatWindow
                     int line = 1;
                 for(auto& e : UserList)
                 {
-                    cw->PutStringToWin(cw->user_list_, line++, 1, e);
+                    cw->PutStringToWin(cw->user_list_, line++, 1, e + std::to_string(UserList.size()));
                 }
 
                 sleep(1);
