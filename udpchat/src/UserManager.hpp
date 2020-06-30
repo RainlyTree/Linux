@@ -1,5 +1,6 @@
 #pragma once 
 #include"LogSer.hpp"
+#include"ConnectionInfo.hpp"
 
 #include<stdio.h>
 #include<sys/socket.h>
@@ -223,9 +224,10 @@ class UserManager
             *vec = OnlineUserVec_;
         }
 
-        void GetUserInfoOff(uint32_t id, UserInfo* p_mesage)
+        void GetUserInfoOff(uint32_t id, ReplyInfo* p_mesage)
         {
-            p_mesage = &UserMap_[id];
+            strcpy(p_mesage->NiceName_ ,UserMap_[id].GetNickName().c_str());
+            strcpy(p_mesage->School_,  UserMap_[id].GetSchool().c_str());
         }
 
     private:

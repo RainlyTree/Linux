@@ -212,7 +212,6 @@ class ChatServer
                     break;
             }
 
-            
             //服务端回复 send(sock, buf, size, 0)
             ri.Status = UserStatus;
             //ri.UserId_ = UserId;
@@ -223,7 +222,7 @@ class ChatServer
                 LOG(ERROR, "SendMsg Failed") << std::endl;
             }
 
-            LOG(INFO, "Send success") << std::endl;
+            LOG(INFO, "Send success" ) << std::endl;
             //关闭连接
             close(lc->GetTcpSock());
             delete lc;
@@ -276,9 +275,11 @@ class ChatServer
                 //特殊处理对端关闭
             }
             //调用用户管理模块处理
-            int ret = UserMana_->Register(ri.NiceName_,ri.School_, ri.Passwd_, &ry->UserId_);
-            ry->NiceName_ = ri.NiceName_;
-            ry->School_ = ri.School_;
+            uint32_t Id;
+            int ret = UserMana_->Register(ri.NiceName_,ri.School_, ri.Passwd_, &Id);
+            ry->UserId_ = Id;
+            strcpy(ry->NiceName_, ri.NiceName_);
+            strcpy(ry->School_ , ri.School_);
             //返回注册成功ID
             if(ret == -1)
             {
@@ -289,7 +290,7 @@ class ChatServer
             //返回状态
         }
 
-        int DealLogin(int sock, struct ReplyInfo* Lo_mes)
+        int DealLogin(int sock, ReplyInfo* Lo_mes)
         {
             struct LoginInfo li;
             ssize_t recvsize = recv(sock, &li, sizeof(li), 0 );
@@ -311,11 +312,7 @@ class ChatServer
                 return LOGINFAILED;
             }
             Lo_mes->UserId_ = li.UserId_;
-            UserInfo p_mes;
-            UserMana_->GetUserInfoOff(li.UserId_, &p_mes);
-
-            Lo_mes->NiceName_ = p_mes.GetNickName();
-            Lo_mes->School_ = p_mes.GetSchool();
+            UserMana_->GetUserInfoOff(li.UserId_, Lo_mes);
 
             return LOGINED;
         }

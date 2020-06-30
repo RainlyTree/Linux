@@ -129,8 +129,8 @@ class ChatClient
             }
 
             //获取用户ID
-            struct ReplyInfo resp;
-            ssize_t recv_size = recv(TcpSock_, &resp, sizeof(resp), 0);
+            ReplyInfo resp;
+            ssize_t recv_size = recv(TcpSock_, &resp, sizeof(ReplyInfo), 0);
             if(recv_size < 0)
             {
                 LOG(ERROR, "recv register response failed") << std::endl;
@@ -190,9 +190,10 @@ class ChatClient
                 LOG(ERROR, "Send Login fata failed") << std::endl;
                 return false;
             }
+
             //解析登陆状态
-            struct ReplyInfo resp;
-            ssize_t recv_size = recv(TcpSock_, &resp, sizeof(resp), 0);
+            ReplyInfo resp;
+            ssize_t recv_size = recv(TcpSock_, &resp, sizeof(ReplyInfo), 0);
             if(recv_size < 0)
             {
                 LOG(ERROR,"Peer shutdown connect ") << std::endl;
@@ -204,6 +205,8 @@ class ChatClient
                 printf("登陆失败\n");
                 return false;
             }
+            me_.School_ = resp.School_;
+            me_.NiceName_ = resp.NiceName_;
             LOG(INFO,"Login success") << std::endl;
             printf("登陆成功\n");
             return true;
@@ -254,7 +257,7 @@ class ChatClient
             auto iter = OnlineUser.begin();
             while(iter != OnlineUser.end())
             {
-                if(*iter == user_info)
+                if((*iter) == user_info)
                     return;
             }
 

@@ -168,8 +168,6 @@ class ChatWindow
                 {
                     pos--;
                 }
-
-
                 sleep(1);
             }
         }
@@ -212,28 +210,28 @@ class ChatWindow
 
         static void RunIntput(ChatWindow* cw, ChatClient* cc)
         {
-            //用户输入的原始信息
-            std::string send_msg;
             //名称  学校 msg 用户id
             Message msg;
             msg.SetNickName(cc->GetMySelf().NiceName_);
             msg.SetSchool(cc->GetMySelf().School_);
             msg.SetUserId(cc->GetMySelf().UserId_);
-            std::string tips = "please Enter# ";
+            //用户输入的原始信息
+            std::string user_enter_msg;
+            //序列化信息
+            std::string send_msg;
+            std::string tips = cc->GetMySelf().NiceName_ + "please Enter# ";
             
             while(1)
             {
                 cw->DrawInput();
                 cw->PutStringToWin(cw->input_, 2, 2, tips);
-                cw->GetStringFromWin(cw->input_, &send_msg);
-                msg.SetMeg(send_msg);
+                cw->GetStringFromWin(cw->input_, &user_enter_msg);
+                msg.SetMeg(user_enter_msg);
 
 
                 msg.serialize(&send_msg);
-
                 cc->SendMsg(send_msg);
 
-                sleep(1);
             }
         }
 
@@ -245,11 +243,12 @@ class ChatWindow
                 cw->DrawUserList();
                 getmaxyx(cw->user_list_, y, x);
                 std::vector<std::string> UserList = cc->GetOnlieUser();
+                    int line = 1;
                 for(auto& e : UserList)
                 {
-                    int line = 1;
-                    cw->PutStringToWin(cw->user_list_, 1, line++, e);
+                    cw->PutStringToWin(cw->user_list_, line++, 1, e + ':' + std::to_string(UserList.size()));
                 }
+
                 sleep(1);
             }
         }
