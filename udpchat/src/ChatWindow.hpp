@@ -219,7 +219,7 @@ class ChatWindow
             std::string user_enter_msg;
             //序列化信息
             std::string send_msg;
-            std::string tips = cc->GetMySelf().NiceName_ + "please Enter# ";
+            std::string tips = "please Enter# ";
             
             while(1)
             {
@@ -246,7 +246,7 @@ class ChatWindow
                     int line = 1;
                 for(auto& e : UserList)
                 {
-                    cw->PutStringToWin(cw->user_list_, line++, 1, e + ':' + std::to_string(UserList.size()));
+                    cw->PutStringToWin(cw->user_list_, line++, 1, e);
                 }
 
                 sleep(1);

@@ -150,6 +150,7 @@ class ChatClient
                 me_.Passwd_ = ri.Passwd_;
                 me_.UserId_ = resp.UserId_;
                 LOG(INFO, "Register success") << std::endl;
+                close(TcpSock_);   //新加的 不知道有没有问题
                 return true;
             }
             LOG(ERROR, "Register failed") << std::endl;
@@ -209,6 +210,7 @@ class ChatClient
             me_.NiceName_ = resp.NiceName_;
             LOG(INFO,"Login success") << std::endl;
             printf("登陆成功\n");
+            close(TcpSock_);    //新加的 不知大有没有问题
             return true;
         }
 
