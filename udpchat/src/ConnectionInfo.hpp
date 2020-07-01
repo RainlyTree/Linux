@@ -41,8 +41,8 @@ struct ReplyInfo
     //当前状态
     int Status;
     uint32_t UserId_;
-    std::string NiceName_;
-    std::string School_;
+    char NiceName_[15];
+    char School_[20];
 };
 
 

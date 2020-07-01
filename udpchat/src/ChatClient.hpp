@@ -129,7 +129,7 @@ class ChatClient
             }
 
             //获取用户ID
-            struct ReplyInfo resp;
+            ReplyInfo resp;
             ssize_t recv_size = recv(TcpSock_, &resp, sizeof(resp), 0);
             if(recv_size < 0)
             {
@@ -150,6 +150,7 @@ class ChatClient
                 me_.Passwd_ = ri.Passwd_;
                 me_.UserId_ = resp.UserId_;
                 LOG(INFO, "Register success") << std::endl;
+                close(TcpSock_);   //新加的 不知道有没有问题
                 return true;
             }
             LOG(ERROR, "Register failed") << std::endl;
@@ -190,12 +191,18 @@ class ChatClient
                 LOG(ERROR, "Send Login fata failed") << std::endl;
                 return false;
             }
+
             //解析登陆状态
-            struct ReplyInfo resp;
-            ssize_t recv_size = recv(TcpSock_, &resp, sizeof(resp), 0);
+            ReplyInfo resp;
+            ssize_t recv_size = recv(TcpSock_, &resp, sizeof(ReplyInfo), 0);
             if(recv_size < 0)
             {
                 LOG(ERROR,"Peer shutdown connect ") << std::endl;
+                return false;
+            }
+            else if(recv_size == 0)
+            {
+                LOG(ERROR, "Peer shutdown connect") << std::endl;
                 return false;
             }
             if(resp.Status != LOGINED)
@@ -204,8 +211,11 @@ class ChatClient
                 printf("登陆失败\n");
                 return false;
             }
+            me_.School_ = resp.School_;
+            me_.NiceName_ = resp.NiceName_;
             LOG(INFO,"Login success") << std::endl;
             printf("登陆成功\n");
+            close(TcpSock_);    //新加的 不知大有没有问题
             return true;
         }
 
@@ -254,8 +264,9 @@ class ChatClient
             auto iter = OnlineUser.begin();
             while(iter != OnlineUser.end())
             {
-                if(*iter == user_info)
+                if((*iter) == user_info)
                     return;
+                ++iter;
             }
 
             OnlineUser.push_back(user_info);
