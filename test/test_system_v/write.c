@@ -18,7 +18,6 @@ int main()
         perror("shmat");
         return 0;
     }
-
     while(1)
     {
         sprintf((char*)lp, "%s", "test-shm \n");
